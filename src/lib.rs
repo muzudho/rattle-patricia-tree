@@ -4,10 +4,11 @@ pub mod tree;
 #[derive(Clone)]
 pub struct Sequence<T> {
     sequence: Vec<T>,
+    cursor: usize,
 }
 
 #[derive(Clone)]
 pub struct Tree<T> {
-    // TODO multiple root
-    root: Option<Sequence<T>>,
+    /// Beginning of sequences.
+    roots: Vec<Sequence<T>>,
 }

@@ -14,7 +14,11 @@ fn main() {
     // Tree.
     let mut tree = Tree::default();
     tree.insert(&seq);
-    assert_eq!("Hello, World!!", format!("tree={:?}", tree));
+    // Hello, World!!
+    assert_eq!(
+        "'H''e''l''l''o'','' ''W''o''r''l''d''!''!'",
+        format!("{:?}", tree)
+    );
 
     println!("Finished.");
 }

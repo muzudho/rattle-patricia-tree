@@ -5,6 +5,7 @@ impl<T> Default for Sequence<T> {
     fn default() -> Self {
         Sequence {
             sequence: Vec::new(),
+            cursor: 0,
         }
     }
 }
@@ -15,6 +16,25 @@ where
 {
     pub fn append(&mut self, raw: &Vec<T>) {
         self.sequence.extend(raw.clone());
+    }
+}
+
+impl<T> Iterator for Sequence<T>
+where
+    T: std::clone::Clone,
+{
+    type Item = T;
+    // The return type is `Option<T>`:
+    //     * When the `Iterator` is finished, `None` is returned.
+    //     * Otherwise, the next value is wrapped in `Some` and returned.
+    fn next(&mut self) -> Option<T> {
+        if self.cursor < self.sequence.len() {
+            let item = Some(self.sequence[self.cursor].clone());
+            self.cursor += 1;
+            return item;
+        }
+
+        return None;
     }
 }
 
