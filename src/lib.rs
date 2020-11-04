@@ -1,13 +1,9 @@
-pub mod character_relation;
-pub mod string_relation;
-pub mod tree_shaped;
+pub mod sequence;
+pub mod tree;
 
-pub struct CharacterRelation<T> {
-    character: T,
-}
-pub struct StringRelation<T> {
+pub struct Sequence<T> {
     string: Vec<T>,
 }
-pub struct TreeShapedRelation<T> {
-    root: Box<StringRelation<T>>,
+pub struct Tree<T> {
+    root: Option<Box<Sequence<T>>>,
 }
