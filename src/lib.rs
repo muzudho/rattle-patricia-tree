@@ -8,5 +8,6 @@ pub struct Sequence<T> {
 
 #[derive(Clone)]
 pub struct Tree<T> {
+    // TODO multiple root
     root: Option<Sequence<T>>,
 }

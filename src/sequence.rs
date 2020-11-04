@@ -9,15 +9,24 @@ impl<T> Default for Sequence<T> {
     }
 }
 
-impl<T> Sequence<T> {
-    pub fn append(&mut self, raw: &Vec<T>) {}
+impl<T> Sequence<T>
+where
+    T: std::clone::Clone,
+{
+    pub fn append(&mut self, raw: &Vec<T>) {
+        self.sequence.extend(raw.clone());
+    }
 }
 
-impl<T> fmt::Debug for Sequence<T> {
+impl<T> fmt::Debug for Sequence<T>
+where
+    T: std::fmt::Debug,
+{
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         let mut buf = String::new();
-        // TODO
-        buf.push_str(&format!("WIP. "));
+        for chr in &self.sequence {
+            buf.push_str(&format!("{:?}", chr));
+        }
         write!(f, "{}", buf)
     }
 }

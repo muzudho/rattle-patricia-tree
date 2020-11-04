@@ -17,11 +17,14 @@ where
     }
 }
 
-impl<T> fmt::Debug for Tree<T> {
+impl<T> fmt::Debug for Tree<T>
+where
+    T: std::fmt::Debug,
+{
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         let mut buf = String::new();
         // TODO
-        buf.push_str(&format!("WIP. "));
+        buf.push_str(&format!("{:?}", self.root));
         write!(f, "{}", buf)
     }
 }
