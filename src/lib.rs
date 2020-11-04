@@ -1,9 +1,12 @@
 pub mod sequence;
 pub mod tree;
 
+#[derive(Clone)]
 pub struct Sequence<T> {
-    string: Vec<T>,
+    sequence: Vec<T>,
 }
+
+#[derive(Clone)]
 pub struct Tree<T> {
-    root: Option<Box<Sequence<T>>>,
+    root: Option<Sequence<T>>,
 }
