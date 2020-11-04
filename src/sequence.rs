@@ -5,15 +5,8 @@ impl<T> Default for SequenceBuilder<T> {
     fn default() -> Self {
         SequenceBuilder {
             sequence: Vec::new(),
-        }
-    }
-}
-
-impl<T> Default for SequenceVal<T> {
-    fn default() -> Self {
-        SequenceVal {
-            sequence: Vec::new(),
-            cursor: 0,
+            head: None,
+            tail: None,
         }
     }
 }
@@ -26,6 +19,33 @@ where
         SequenceVal {
             sequence: self.sequence.clone(),
             cursor: 0,
+            head: self.head.clone(),
+            tail: self.tail.clone(),
+        }
+    }
+
+    /// 2つのシーケンスを結合して、１つのシーケンスを作成します。  
+    /// ただし、 headのtail と、 tailのhead は None である必要があります。  
+    pub fn concat(head: &SequenceVal<T>, tail: &SequenceVal<T>) -> SequenceVal<T> {
+        if let Some(_) = head.tail {
+            panic!("head.tail is not None.");
+        }
+        if let Some(_) = tail.head {
+            panic!("tail.head is not None.");
+        }
+
+        let mut buf = Vec::new();
+        for x in head.clone().into_iter() {
+            buf.push(x);
+        }
+        for x in tail.clone().into_iter() {
+            buf.push(x);
+        }
+        SequenceVal {
+            sequence: buf,
+            cursor: 0,
+            head: head.head.clone(),
+            tail: tail.tail.clone(),
         }
     }
 

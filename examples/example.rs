@@ -16,6 +16,15 @@ fn main() {
             'I', 'l', 'l', 'u', 's', 't', 'r', 'a', 't', 'i', 'o', 'n',
         ])
         .build();
+    let seq3 = SequenceBuilder::default()
+        .push(&vec!['I', 'l', 'l', 'u', 's', 't'])
+        .build();
+    let seq4 = SequenceBuilder::default()
+        .push(&vec!['s', 't', 'a'])
+        .build();
+    let seq5 = SequenceBuilder::default()
+        .push(&vec!['t', 'i', 'o', 'n'])
+        .build();
 
     // Tree.
     let mut tree = Tree::default();
@@ -34,6 +43,20 @@ fn main() {
 ",
         format!("{:?}", tree)
     );
+
+    // TODO 連結したい。
+    tree.insert(&seq3);
+    assert_eq!(
+        "'H''e''l''l''o'','' ''W''o''r''l''d''!''!'
+'I''l''l''u''s''t''r''a''t''i''o''n'
+'I''l''l''u''s''t'
+",
+        format!("{:?}", tree)
+    );
+
+    // Concatination.
+    let seq4and5 = SequenceBuilder::concat(&seq4, &seq5);
+    assert_eq!("'s''t''a''t''i''o''n'", format!("{:?}", seq4and5));
 
     println!("Finished.");
 }
