@@ -1,25 +1,41 @@
-use crate::Sequence;
+use crate::{SequenceBuilder, SequenceVal};
 use std::fmt;
 
-impl<T> Default for Sequence<T> {
+impl<T> Default for SequenceBuilder<T> {
     fn default() -> Self {
-        Sequence {
+        SequenceBuilder {
+            sequence: Vec::new(),
+        }
+    }
+}
+
+impl<T> Default for SequenceVal<T> {
+    fn default() -> Self {
+        SequenceVal {
             sequence: Vec::new(),
             cursor: 0,
         }
     }
 }
 
-impl<T> Sequence<T>
+impl<T> SequenceBuilder<T>
 where
     T: std::clone::Clone,
 {
-    pub fn append(&mut self, raw: &Vec<T>) {
+    pub fn build(&self) -> SequenceVal<T> {
+        SequenceVal {
+            sequence: self.sequence.clone(),
+            cursor: 0,
+        }
+    }
+
+    pub fn push<'a>(&'a mut self, raw: &Vec<T>) -> &'a Self {
         self.sequence.extend(raw.clone());
+        self
     }
 }
 
-impl<T> Iterator for Sequence<T>
+impl<T> Iterator for SequenceVal<T>
 where
     T: std::clone::Clone,
 {
@@ -38,7 +54,7 @@ where
     }
 }
 
-impl<T> fmt::Debug for Sequence<T>
+impl<T> fmt::Debug for SequenceVal<T>
 where
     T: std::fmt::Debug,
 {

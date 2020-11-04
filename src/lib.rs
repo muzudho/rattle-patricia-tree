@@ -1,8 +1,12 @@
 pub mod sequence;
 pub mod tree;
 
+pub struct SequenceBuilder<T> {
+    sequence: Vec<T>,
+}
+
 #[derive(Clone)]
-pub struct Sequence<T> {
+pub struct SequenceVal<T> {
     sequence: Vec<T>,
     cursor: usize,
 }
@@ -10,5 +14,5 @@ pub struct Sequence<T> {
 #[derive(Clone)]
 pub struct Tree<T> {
     /// Beginning of sequences.
-    roots: Vec<Sequence<T>>,
+    roots: Vec<SequenceVal<T>>,
 }

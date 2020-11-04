@@ -1,4 +1,4 @@
-use crate::Sequence;
+use crate::SequenceVal;
 use crate::Tree;
 use std::fmt;
 
@@ -12,7 +12,7 @@ impl<T> Tree<T>
 where
     T: std::clone::Clone,
 {
-    pub fn insert(&mut self, seq: &Sequence<T>) {
+    pub fn insert(&mut self, seq: &SequenceVal<T>) {
         self.roots.push(seq.clone());
     }
 }
@@ -31,6 +31,11 @@ where
                 // println!("(trace.31) chr={:?}", chr);
                 buf.push_str(&format!("{:?}", chr));
             }
+            // Newline.
+            buf.push_str(
+                "
+",
+            );
         }
         write!(f, "{}", buf)
     }
