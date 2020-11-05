@@ -1,9 +1,6 @@
-/*
-use crate::SequenceRef;
+use crate::SequenceVal;
 use crate::Tree;
-use std::cell::RefCell;
 use std::fmt;
-use std::rc::Rc;
 
 impl<T> Default for Tree<T> {
     fn default() -> Self {
@@ -15,8 +12,8 @@ impl<T> Tree<T>
 where
     T: std::clone::Clone,
 {
-    pub fn insert(&mut self, seq: &SequenceRef<T>) {
-        self.roots.push(Rc::clone(seq));
+    pub fn insert(&mut self, seq: &SequenceVal<T>) {
+        self.roots.push(seq.clone());
     }
 }
 
@@ -43,4 +40,3 @@ where
         write!(f, "{}", buf)
     }
 }
-*/
