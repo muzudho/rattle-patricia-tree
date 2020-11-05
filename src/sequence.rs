@@ -1,5 +1,6 @@
-use crate::{SequenceBuilder, SequenceVal};
+use crate::{Link, SequenceBuilder, SequenceVal};
 use std::fmt;
+use std::rc::Rc;
 
 impl<T> Default for SequenceBuilder<T> {
     fn default() -> Self {
@@ -47,6 +48,24 @@ where
             prev: head.prev.clone(),
             next: tail.next.clone(),
         }
+    }
+
+    /// 2つのシーケンスを結合して、１つのシーケンスを作成します。  
+    /// ただし、 firstのtail と、 secondのhead は None である必要があります。  
+    pub fn link(first: &Link<SequenceVal<T>>, second: &Link<SequenceVal<T>>) {
+        // `borrow_mut()` - 参照を、同時に１つだけ、変更可能にします。
+        if let Some(_) = first.borrow_mut().next {
+            panic!("first.next is not None.");
+        }
+        if let Some(_) = second.borrow_mut().prev {
+            panic!("second.prev is not None.");
+        }
+
+        // firstのnext を second にします。
+        // secondのprev を first にします。
+        // `RC::clone( )` - 所有者が増えました。
+        first.borrow_mut().next = Some(Rc::clone(second));
+        second.borrow_mut().prev = Some(Rc::clone(first));
     }
 
     pub fn push<'a>(&'a mut self, raw: &Vec<T>) -> &'a Self {
