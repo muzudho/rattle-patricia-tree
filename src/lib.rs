@@ -14,7 +14,7 @@ type Link<T> = Rc<RefCell<T>>;
 #[derive(Clone)]
 pub struct Tree<T> {
     /// Beginning of sequences.
-    roots: Vec<SequenceVal<T>>,
+    heads: Vec<SequenceVal<T>>,
 }
 
 pub struct SequenceBuilder<T> {
