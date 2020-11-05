@@ -1,12 +1,16 @@
-use crate::{SequenceBuilder, SequenceVal};
+/*
+use crate::{Iter, SequenceBuilder, SequenceVal};
+use std::cell::RefCell;
 use std::fmt;
+use std::rc::Rc;
 
 impl<T> Default for SequenceBuilder<T> {
     fn default() -> Self {
         SequenceBuilder {
             sequence: Vec::new(),
-            head: None,
-            tail: None,
+            prev: None,
+            next: None,
+            length: 0,
         }
     }
 }
@@ -15,23 +19,31 @@ impl<T> SequenceBuilder<T>
 where
     T: std::clone::Clone,
 {
-    pub fn build(&self) -> SequenceVal<T> {
-        SequenceVal {
+    pub fn build(&self) -> Rc<RefCell<SequenceVal<T>>> {
+        Rc::new(RefCell::new(SequenceVal {
             sequence: self.sequence.clone(),
             cursor: 0,
-            head: self.head.clone(),
-            tail: self.tail.clone(),
-        }
+            prev: self.prev.clone(),
+            next: self.next.clone(),
+            length: 0,
+        }))
     }
-
-    /// 2つのシーケンスを結合して、１つのシーケンスを作成します。  
-    /// ただし、 headのtail と、 tailのhead は None である必要があります。  
+*/
+/*
+/// Reference.
+pub fn build_ref(val: &SequenceVal<T>) -> Rc<RefCell<SequenceVal<T>>> {
+    Rc::new(RefCell::new(*val))
+}
+*/
+/*
+    /// 2つのシーケンスを結合して、１つのシーケンスを作成します。
+    /// ただし、 headのtail と、 tailのhead は None である必要があります。
     pub fn concat(head: &SequenceVal<T>, tail: &SequenceVal<T>) -> SequenceVal<T> {
-        if let Some(_) = head.tail {
+        if let Some(_) = head.next {
             panic!("head.tail is not None.");
         }
-        if let Some(_) = tail.head {
-            panic!("tail.head is not None.");
+        if let Some(_) = tail.prev {
+            panic!("tail.prev is not None.");
         }
 
         let mut buf = Vec::new();
@@ -44,14 +56,57 @@ where
         SequenceVal {
             sequence: buf,
             cursor: 0,
-            head: head.head.clone(),
-            tail: tail.tail.clone(),
+            prev: head.prev.clone(),
+            next: tail.next.clone(),
+            length: 0,
+        }
+    }
+*/
+/*
+/// 2つのシーケンスをリンクで結合します。
+/// ただし、入力時は、 headのtail と、 tailのhead は None である必要があります。
+pub fn link(head: &mut SequenceVal<T>, tail: &SequenceVal<T>) {
+    // head の tail に tail をリンクします。
+    match head.tail.take() {
+        Some(head_tail) => {
+            panic!("Unimplemented"); // TODO
+        }
+        None => {
+            // first element
+            // Rc を使っているなら、クローンは Rc::clone() を使ってください。
+            head.tail = Some(Rc::clone(tail));
         }
     }
 
+    // TODO tail.head = Some(Rc::clone(&head));
+}
+*/
+/*
     pub fn push<'a>(&'a mut self, raw: &Vec<T>) -> &'a Self {
         self.sequence.extend(raw.clone());
         self
+    }
+
+    /// イテレーターで使います。
+    pub fn len(&self) -> usize {
+        self.length
+    }
+
+    pub fn iter(&self) -> Iter<T> {
+        Iter {
+            current: if self.len() == 0 {
+                None
+            } else {
+                Some(Rc::clone(&self.prev.as_ref().unwrap()))
+            },
+        }
+    }
+}
+
+impl<T> SequenceVal<T> {
+    /// イテレーターで使います。
+    pub fn len(&self) -> usize {
+        self.length
     }
 }
 
@@ -86,3 +141,4 @@ where
         write!(f, "{}", buf)
     }
 }
+*/
