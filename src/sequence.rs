@@ -5,8 +5,8 @@ impl<T> Default for SequenceBuilder<T> {
     fn default() -> Self {
         SequenceBuilder {
             sequence: Vec::new(),
-            head: None,
-            tail: None,
+            prev: None,
+            next: None,
         }
     }
 }
@@ -19,18 +19,18 @@ where
         SequenceVal {
             sequence: self.sequence.clone(),
             cursor: 0,
-            head: self.head.clone(),
-            tail: self.tail.clone(),
+            prev: self.prev.clone(),
+            next: self.next.clone(),
         }
     }
 
     /// 2つのシーケンスを結合して、１つのシーケンスを作成します。  
     /// ただし、 headのtail と、 tailのhead は None である必要があります。  
     pub fn concat(head: &SequenceVal<T>, tail: &SequenceVal<T>) -> SequenceVal<T> {
-        if let Some(_) = head.tail {
+        if let Some(_) = head.next {
             panic!("head.tail is not None.");
         }
-        if let Some(_) = tail.head {
+        if let Some(_) = tail.prev {
             panic!("tail.head is not None.");
         }
 
@@ -44,8 +44,8 @@ where
         SequenceVal {
             sequence: buf,
             cursor: 0,
-            head: head.head.clone(),
-            tail: tail.tail.clone(),
+            prev: head.prev.clone(),
+            next: tail.next.clone(),
         }
     }
 

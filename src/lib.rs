@@ -11,22 +11,22 @@ use std::rc::Rc;
 /// だいたい Box<> の感覚で使う事ができます。
 type Link<T> = Rc<RefCell<T>>;
 
+#[derive(Clone)]
+pub struct Tree<T> {
+    /// Beginning of sequences.
+    roots: Vec<SequenceVal<T>>,
+}
+
 pub struct SequenceBuilder<T> {
     sequence: Vec<T>,
-    head: Option<Link<SequenceVal<T>>>,
-    tail: Option<Link<SequenceVal<T>>>,
+    prev: Option<Link<SequenceVal<T>>>,
+    next: Option<Link<SequenceVal<T>>>,
 }
 
 #[derive(Clone)]
 pub struct SequenceVal<T> {
     sequence: Vec<T>,
     cursor: usize,
-    head: Option<Link<SequenceVal<T>>>,
-    tail: Option<Link<SequenceVal<T>>>,
-}
-
-#[derive(Clone)]
-pub struct Tree<T> {
-    /// Beginning of sequences.
-    roots: Vec<SequenceVal<T>>,
+    prev: Option<Link<SequenceVal<T>>>,
+    next: Option<Link<SequenceVal<T>>>,
 }
