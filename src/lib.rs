@@ -26,7 +26,12 @@ pub struct SequenceBuilder<T> {
 #[derive(Clone)]
 pub struct SequenceVal<T> {
     sequence: Vec<T>,
-    cursor: usize,
     prev: Option<Link<SequenceVal<T>>>,
     next: Option<Link<SequenceVal<T>>>,
+}
+
+/// 配列のインデックスを持ちます。
+pub struct SequenceValIter<T> {
+    owner: Box<SequenceVal<T>>,
+    cursor: usize,
 }

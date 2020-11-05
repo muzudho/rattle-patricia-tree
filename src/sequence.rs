@@ -1,4 +1,4 @@
-use crate::{Link, SequenceBuilder, SequenceVal};
+use crate::{Link, SequenceBuilder, SequenceVal, SequenceValIter};
 use std::fmt;
 use std::rc::Rc;
 
@@ -12,14 +12,13 @@ impl<T> Default for SequenceBuilder<T> {
     }
 }
 
-impl<T> SequenceBuilder<T>
+impl<T: 'static> SequenceBuilder<T>
 where
     T: std::clone::Clone,
 {
     pub fn build(&self) -> SequenceVal<T> {
         SequenceVal {
             sequence: self.sequence.clone(),
-            cursor: 0,
             prev: self.prev.clone(),
             next: self.next.clone(),
         }
@@ -44,7 +43,6 @@ where
         }
         SequenceVal {
             sequence: buf,
-            cursor: 0,
             prev: head.prev.clone(),
             next: tail.next.clone(),
         }
@@ -74,6 +72,19 @@ where
     }
 }
 
+impl<T> SequenceVal<T> {
+    pub fn iter(self) -> SequenceValIter<T> {
+        // イテレーションする都度、Iterインスタンスを作成します。
+        SequenceValIter {
+            owner: Box::new(self),
+            // カレントを設定します。
+            cursor: 0,
+        }
+    }
+}
+
+/*
+/// 前へ進むイテレーターです。
 impl<T> Iterator for SequenceVal<T>
 where
     T: std::clone::Clone,
@@ -90,6 +101,40 @@ where
         }
 
         return None;
+    }
+}
+*/
+
+impl<T> Iterator for SequenceValIter<T>
+where
+    T: std::clone::Clone,
+{
+    type Item = T;
+    // The return type is `Option<T>`:
+    //     * When the `Iterator` is finished, `None` is returned.
+    //     * Otherwise, the next value is wrapped in `Some` and returned.
+    fn next(&mut self) -> Option<Self::Item> {
+        if self.cursor < self.owner.sequence.len() {
+            let item = Some(self.owner.sequence[self.cursor].clone());
+            self.cursor += 1;
+            return item;
+        }
+
+        return None;
+    }
+}
+
+impl<T: Clone> IntoIterator for SequenceVal<T>
+where
+    T: std::clone::Clone,
+{
+    type Item = T;
+    type IntoIter = SequenceValIter<T>;
+
+    /// イントゥ・イテレーターを返します。
+    fn into_iter(self) -> Self::IntoIter {
+        // イテレーターを返すのと同じ振る舞いで実装します。
+        self.iter()
     }
 }
 

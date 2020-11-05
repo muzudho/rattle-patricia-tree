@@ -17,7 +17,7 @@ where
     }
 }
 
-impl<T> fmt::Debug for Tree<T>
+impl<T: 'static> fmt::Debug for Tree<T>
 where
     T: std::fmt::Debug + std::clone::Clone,
 {
