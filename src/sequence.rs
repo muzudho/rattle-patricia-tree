@@ -83,38 +83,19 @@ impl<T> SequenceVal<T> {
     }
 }
 
-/*
-/// 前へ進むイテレーターです。
-impl<T> Iterator for SequenceVal<T>
-where
-    T: std::clone::Clone,
-{
-    type Item = T;
-    // The return type is `Option<T>`:
-    //     * When the `Iterator` is finished, `None` is returned.
-    //     * Otherwise, the next value is wrapped in `Some` and returned.
-    fn next(&mut self) -> Option<T> {
-        if self.cursor < self.sequence.len() {
-            let item = Some(self.sequence[self.cursor].clone());
-            self.cursor += 1;
-            return item;
-        }
-
-        return None;
-    }
-}
-*/
-
 impl<T> Iterator for SequenceValIter<T>
 where
     T: std::clone::Clone,
 {
+    // Self::Item ってこれ。
     type Item = T;
+
     // The return type is `Option<T>`:
     //     * When the `Iterator` is finished, `None` is returned.
     //     * Otherwise, the next value is wrapped in `Some` and returned.
     fn next(&mut self) -> Option<Self::Item> {
         if self.cursor < self.owner.sequence.len() {
+            // TODO .clone() していて重そう。
             let item = Some(self.owner.sequence[self.cursor].clone());
             self.cursor += 1;
             return item;
